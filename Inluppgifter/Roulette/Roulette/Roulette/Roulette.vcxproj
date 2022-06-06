@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7fbacc56-b46c-4f8c-8e5e-0ae8fae6b395}</ProjectGuid>
-    <RootNamespace>ovning2</RootNamespace>
+    <ProjectGuid>{8818b49b-6b59-44de-9bf0-7f28df666d79}</ProjectGuid>
+    <RootNamespace>Roulette</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
