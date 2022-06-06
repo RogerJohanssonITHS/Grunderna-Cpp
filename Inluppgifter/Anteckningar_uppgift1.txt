@@ -1,0 +1,19 @@
+start
+
+vill du spela eller avsluta? (presentera saldo)
+
+inmatning av insats (100, 300 eller 500 kr)
+kontrollera insatsen och saldo
+
+inmatning färg eller nummer
+kontrollera att färg eller nummer är giltiga
+
+slumpa nummer (1-36; jämna nummer svarta, ojämna nummer röda)
+
+visa numret
+
+visa resultatet (vinst eller förlust och kvarvarande summa)
+
+
+
+Antagande 1: banken har oändligt mycket pengar.
