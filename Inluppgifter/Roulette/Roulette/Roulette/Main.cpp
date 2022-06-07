@@ -22,11 +22,11 @@ bool checkBet(int bet) {
 		return true;
 	}
 	if (bet != 100 && bet != 300 && bet != 500) {
-		cout << "Du måste satsa 100, 300 eller 500 kr! \n";
+		cout << "Du måste satsa 100, 300 eller 500 kr!" << endl;
 		return false;
 	}
 	if (saldo < bet) {
-		cout << "Du kan inte satsa så mycket pengar. Du har bara " << saldo << " kr kvar. \n";
+		cout << "Du kan inte satsa så mycket pengar. Du har bara " << saldo << " kr kvar." << endl;
 			return false;
 	}
 }
