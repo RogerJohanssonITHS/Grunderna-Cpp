@@ -123,7 +123,7 @@ int main() {
 		}
 
 		if (currentColor != playerColor and currentNumber != playerNumber) {
-			cout << "Tyvärr ingen vinst!!" << endl;
+			cout << "Tyvärr ingen vinst!" << endl;
 		}
 
 		// återställ värden för flaggor och spelarval

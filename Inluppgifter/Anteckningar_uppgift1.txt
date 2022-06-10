@@ -17,3 +17,4 @@ visa resultatet (vinst eller förlust och kvarvarande summa)
 
 
 Antagande 1: banken har oändligt mycket pengar.
+Antagande 2: roulett-nollan används inte.
