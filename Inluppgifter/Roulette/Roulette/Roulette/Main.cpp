@@ -6,67 +6,51 @@ using namespace std;
 
 // startsaldo för spelaren i kr
 int saldo = 1000;
-int selection = 1; //variabel för att spara spelarens val
+int selectionContinue = 1; //variabel för att spara spelarens val.
 int bet = 0; //variabel för att spara insatsen
 bool okToProceed = false; //variabel för att kontrollera om insatsen är ok (storlek, saldo)
-bool correctChoice = false; //variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/rött, svart)
-bool correctPlaystyleChoice = false; //variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/rött, svart) 
+bool correctChoice = false; //variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/röd, svart)
+bool correctPlaystyleChoice = false; //variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/röd, svart) 
 int playerPlaystyleChoice = 2; //variabel för att spara spelarens val av spelsätt
-int playerColor = 2; //variabel för att spara spelarens val av färg 0 = svart. 1 = rött. 2 är default.
+int playerColor = 2; //variabel för att spara spelarens val av färg 0 = svart. 1 = röd. 2 är default.
 int playerNumber = 0; //variabel för att spara spelarens val av nummer 1-36.
 int currentNumber = 0; //variabel för att spara resultatet av senaste roulettsnurren
-int currentColor = 0; //variabel för att spara färg på senaste roulettsnurren 0 = svart. 1 = rött.
+int currentColor = 0; //variabel för att spara färg på senaste roulettsnurren 0 = svart. 1 = röd.
 string currentColorString = ""; //variabel för att kunna presentera resultatet för spelaren
 
-//funktion som returnerar ett slumptal där 1 <= slumptalel <= 36
-int drawNumber() {
-	srand(time(0));
-	return rand() % 36 + 1;
-}
-
-//funktion som returnerar true om spelaren har tillräckligt med pengar på saldot för den tänkta insatsen; annars false
-bool checkBet(int bet) {
-	if (bet == 100 || bet == 300 || bet == 500 && saldo >= bet) {
-		//dra av insatsen från saldot
-		saldo -= bet;
-		return true;
-	}
-	if (bet != 100 && bet != 300 && bet != 500) {
-		cout << "Du måste satsa 100, 300 eller 500 kr!" << endl;
-		return false;
-	}
-	if (saldo < bet) {
-		cout << "Du kan inte satsa så mycket pengar. Du har bara " << saldo << " kr kvar." << endl;
-		return false;
-	}
-}
 
 int main() {
 	// svenska tecken för utskrift
 	setlocale(LC_ALL, "sv_SE");
 
 	//fortsätt spelet tills pengarna tar slut eller om spelaren vill avbryta i nästa steg
-	while (saldo >= 0) {
+	while (true) {
+
 		// låt spelaren välja om den vill fortsätta spela
 		cout << "Vill du fortsätta spela? (0 för avbryt)" << " Du har " << saldo << " kr kvar.";
-		cin >> selection;
-		if (selection == 0) {
-			return 0;
-		}
-
-		if (saldo < 100) {
-			cout << "För lite pengar kvar för en insats";
+		cin >> selectionContinue;
+		if (selectionContinue == 0) {
 			return 0;
 		}
 
 		// låt spelaren välja insats
 		while (!okToProceed) {
-			cout << "Hur mycket vill du satsa? (100, 300 eller 500)? ";
+			cout << "Hur mycket vill du satsa? (100, 300 eller 500 kr)? ";
 			cin >> bet;
 
-			// kontrollera insatsen
-			okToProceed = checkBet(bet);
-
+			// kontrollera insatsens storlek och mot saldot
+			if (bet != 100 && bet != 300 && bet != 500) {
+				cout << "Du måste satsa 100, 300 eller 500 kr!" << endl;
+			}
+			else if(saldo < bet)
+			{
+				cout << "Du kan inte satsa så mycket pengar. Du har bara " << saldo << " kr kvar." << endl;
+			}
+			if ((bet == 100 || bet == 300 || bet == 500) && saldo >= bet) {
+				//dra av insatsen från saldot
+				saldo -= bet;
+				okToProceed = true;
+			}
 		}
 
 		// låt spelaren välja nummer 1-36 eller färg rött/svart
@@ -83,12 +67,12 @@ int main() {
 			}
 			// beroende på playerPlaystyleChoice så skall användaren mata in ett nummer eller en färg
 			if (playerPlaystyleChoice) {
-				cout << "Välj en färg(rött (1)/ svart (0))? ";
+				cout << "Välj en färg(svart (0)/ röd (1))? ";
 				cin >> playerColor;
 				if (playerColor == 0 or playerColor == 1) {
 					correctChoice = true;
 				}
-				else cout << "Du måste välja rött eller svart!" << endl;
+				else cout << "Du måste välja svart eller röd!" << endl;
 			}
 			else {
 				cout << "Välj ett nummer(1 - 36)? ";
@@ -99,8 +83,9 @@ int main() {
 				else cout << "Du måste välja ett tal 1 till 36!" << endl;
 			}
 		}
-		//dra ett slumptal
-		currentNumber = drawNumber();
+		//dra ett slumptal där 1 <= slumptalel <= 36
+		srand(time(0));
+		currentNumber = rand() % 36 + 1;
 		//bestäm färg på slumptalet. Om slumptalet modulo 2 = 0 så är talet svart. Om slumptalet modulo 2 = 1 så är talet rött.
 		currentColor = currentNumber % 2;
 
@@ -110,6 +95,7 @@ int main() {
 		}
 		else currentColorString = "svart";
 		cout << "Det blev nummer " << currentNumber << " som är " << currentColorString << endl;
+
 		//kontrollera om spelaren vunnit och
 		//betala ut ev. vinst. Korrekt siffra ger 10 ggr insatsen. Korrekt färg ger 2 ggr insatsen.
 		if (currentNumber == playerNumber) {
@@ -126,19 +112,20 @@ int main() {
 			cout << "Tyvärr ingen vinst!" << endl;
 		}
 
+		// kontrollera saldot mot minsta insats
+		if (saldo < 100)
+		{
+			cout << "För lite pengar kvar för en insats!";
+			return 0;
+		}
+
 		// återställ värden för flaggor och spelarval
-		bet = 0; //variabel för att spara insatsen
 		okToProceed = false; //variabel för att kontrollera om insatsen är ok (storlek, saldo)
 		correctChoice = false; //variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/rött, svart)
-		correctPlaystyleChoice = false; //variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/rött, svart) 
+		correctPlaystyleChoice = false; //variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/röd, svart) 
 		playerPlaystyleChoice = 2; //variabel för att spara spelarens val av spelsätt
-		playerColor = 2; //variabel för att spara spelarens val av färg 0 = svart. 1 = rött. 2 är default.
-		playerNumber = 0; //variabel för att spara spelarens val av nummer 1-36.
-		currentNumber = 0; //variabel för att spara resultatet av senaste roulettsnurren
-		currentColor = 0; //variabel för att spara färg på senaste roulettsnurren 0 = svart. 1 = rött.
-
+		playerColor = 2; //variabel för att spara spelarens val av färg 0 = svart. 1 = röd. 2 är default.
 	}
-	return 0;
 }
 
 
