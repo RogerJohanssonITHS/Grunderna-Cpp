@@ -4,26 +4,26 @@
 
 using namespace std;
 
-// startsaldo för spelaren i kr
-int saldo = 1000;
-int selectionContinue = 1; //variabel för att spara spelarens val.
-int bet = 0; //variabel för att spara insatsen
-bool okToProceed = false; //variabel för att kontrollera om insatsen är ok (storlek, saldo)
-bool correctChoice = false; //variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/röd, svart)
-bool correctPlaystyleChoice = false; //variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/röd, svart) 
-int playerPlaystyleChoice = 2; //variabel för att spara spelarens val av spelsätt
-int playerColor = 2; //variabel för att spara spelarens val av färg 0 = svart. 1 = röd. 2 är default.
-int playerNumber = 0; //variabel för att spara spelarens val av nummer 1-36.
-int currentNumber = 0; //variabel för att spara resultatet av senaste roulettsnurren
-int currentColor = 0; //variabel för att spara färg på senaste roulettsnurren 0 = svart. 1 = röd.
-string currentColorString = ""; //variabel för att kunna presentera resultatet för spelaren
+// variabelinitieringar
+int saldo = 1000; // startsaldo för spelaren i kr
+int selectionContinue = 1; // variabel för att spara spelarens val.
+int bet = 0; // variabel för att spara insatsen
+bool okToProceed = false; // variabel för att kontrollera om insatsen är ok (storlek, saldo)
+bool correctChoice = false; // variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/röd, svart)
+bool correctPlaystyleChoice = false; // variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/röd, svart) 
+int playerPlaystyleChoice = 2; // variabel för att spara spelarens val av spelsätt
+int playerColor = 2; // variabel för att spara spelarens val av färg 0 = svart. 1 = röd. 2 är default.
+int playerNumber = 0; // variabel för att spara spelarens val av nummer 1-36.
+int currentNumber = 0; // variabel för att spara resultatet av senaste roulettsnurren
+int currentColor = 0; // variabel för att spara färg på senaste roulettsnurren 0 = svart. 1 = röd.
+string currentColorString = ""; // variabel för att kunna presentera resultatet för spelaren
 
 
 int main() {
 	// svenska tecken för utskrift
 	setlocale(LC_ALL, "sv_SE");
 
-	//fortsätt spelet tills pengarna tar slut eller om spelaren vill avbryta i nästa steg
+	// fortsätt spelet tills pengarna tar slut eller om spelaren vill avbryta i nästa steg
 	while (true) {
 
 		// låt spelaren välja om den vill fortsätta spela
@@ -83,21 +83,21 @@ int main() {
 				else cout << "Du måste välja ett tal 1 till 36!" << endl;
 			}
 		}
-		//dra ett slumptal där 1 <= slumptalel <= 36
+		// dra ett slumptal där 1 <= slumptalel <= 36
 		srand(time(0));
 		currentNumber = rand() % 36 + 1;
-		//bestäm färg på slumptalet. Om slumptalet modulo 2 = 0 så är talet svart. Om slumptalet modulo 2 = 1 så är talet rött.
+		// bestäm färg på slumptalet. Om slumptalet modulo 2 = 0 så är talet svart. Om slumptalet modulo 2 = 1 så är talet rött.
 		currentColor = currentNumber % 2;
 
-		//skriv ut rätt nummer och färg
+		// skriv ut rätt nummer och färg
 		if (currentColor == 1) {
 			currentColorString = "röd";
 		}
 		else currentColorString = "svart";
 		cout << "Det blev nummer " << currentNumber << " som är " << currentColorString << endl;
 
-		//kontrollera om spelaren vunnit och
-		//betala ut ev. vinst. Korrekt siffra ger 10 ggr insatsen. Korrekt färg ger 2 ggr insatsen.
+		// kontrollera om spelaren vunnit och
+		// betala ut ev. vinst. Korrekt siffra ger 10 ggr insatsen. Korrekt färg ger 2 ggr insatsen.
 		if (currentNumber == playerNumber) {
 			saldo += bet * 10;
 			cout << "Grattis till vinsten!" << endl;
@@ -120,12 +120,10 @@ int main() {
 		}
 
 		// återställ värden för flaggor och spelarval
-		okToProceed = false; //variabel för att kontrollera om insatsen är ok (storlek, saldo)
-		correctChoice = false; //variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/rött, svart)
-		correctPlaystyleChoice = false; //variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/röd, svart) 
-		playerPlaystyleChoice = 2; //variabel för att spara spelarens val av spelsätt
-		playerColor = 2; //variabel för att spara spelarens val av färg 0 = svart. 1 = röd. 2 är default.
+		okToProceed = false; // variabel för att kontrollera om insatsen är ok (storlek, saldo)
+		correctChoice = false; // variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/rött, svart)
+		correctPlaystyleChoice = false; // variabel för att kontrollera om spelaren gjort ett korrekt val (1-36/röd, svart) 
+		playerPlaystyleChoice = 2; // variabel för att spara spelarens val av spelsätt
+		playerColor = 2; // variabel för att spara spelarens val av färg 0 = svart. 1 = röd. 2 är default.
 	}
 }
-
-
