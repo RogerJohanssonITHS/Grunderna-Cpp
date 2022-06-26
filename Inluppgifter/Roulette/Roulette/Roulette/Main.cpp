@@ -42,8 +42,7 @@ int main() {
 			if (bet != 100 && bet != 300 && bet != 500) {
 				cout << "Du måste satsa 100, 300 eller 500 kr!" << endl;
 			}
-			else if(saldo < bet)
-			{
+			else if(saldo < bet) {
 				cout << "Du kan inte satsa så mycket pengar. Du har bara " << saldo << " kr kvar." << endl;
 			}
 			if ((bet == 100 || bet == 300 || bet == 500) && saldo >= bet) {
@@ -84,7 +83,7 @@ int main() {
 				else cout << "Du måste välja ett tal 1 till 36!" << endl;
 			}
 		}
-		// dra ett slumptal där 1 <= slumptalel <= 36
+		// dra ett slumptal där 1 <= slumptalet <= 36
 		srand(time(0));
 		currentNumber = rand() % 36 + 1;
 		// bestäm färg på slumptalet. Om slumptalet modulo 2 = 0 så är talet svart. Om slumptalet modulo 2 = 1 så är talet rött.
