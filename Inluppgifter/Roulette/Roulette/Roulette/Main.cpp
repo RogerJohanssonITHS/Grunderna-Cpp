@@ -47,8 +47,9 @@ int main() {
 				cout << "Du kan inte satsa så mycket pengar. Du har bara " << saldo << " kr kvar." << endl;
 			}
 			if ((bet == 100 || bet == 300 || bet == 500) && saldo >= bet) {
-				//dra av insatsen från saldot
+				//dra av insatsen från saldot och presentera saldot efter insats
 				saldo -= bet;
+				cout << "Insatsen är betald. Du har " << saldo << " kr kvar." << endl;
 				okToProceed = true;
 			}
 		}
