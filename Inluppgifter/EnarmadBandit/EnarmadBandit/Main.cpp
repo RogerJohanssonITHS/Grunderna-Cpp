@@ -1,6 +1,7 @@
 #include <iostream>;
 #include <ctime>; // för random 
 #include <locale.h>; // för svenska tecken i terminalen 
+#include <map>; // för dictionary
 
 using namespace std;
 
@@ -65,28 +66,8 @@ void printPlayField(char playField[3][3]) {
 	return;
 }
 
-int main() {
-	char playField[3][3]{}; // fält som håller den enarmade banditens spelfält
-
-	// frö för slumptalsgenerering
-	srand(time(0));
-
-	// svenska tecken för utskrift 
-	setlocale(LC_ALL, "sv_SE");
-
-	// skapa spelarens saldo
-
-	// fråga efter insats (flera insatser per spelomgång tillåts? Kanske inte...)
-
-	// skapa spelfältet
-	generatePlayField(playField);
-
-	// skriv ut spelfältet
-	printPlayField(playField);
-
-	// räkna antal vinnande kombinationer
-	// wins = countWinningCombinations (playField)
-
+// funktion som returnerar antal vinnande kombinationer för ett spelfält
+int countWinningCombinations(char playField[3][3]) {
 	int wins = 0; // variabel som håller antal vinnande kombinationer
 	// räkna vinnande rader
 	for (int i = 0; i < 3; i++)
@@ -116,7 +97,105 @@ int main() {
 		wins++;
 	}
 
-	cout << wins;
+	return wins;
+}
 
+// funktion som kontrollerar att spelaren sätter in ett tillåtet belopp (100, 300 eller 500 kr)
+// och returnerar det
+int depositPlayerAccount() {
+	int playerAccountToTest; //variabel som sparar spelarens inmatade insatsvärde
+
+	while (true) {
+		cout << "Hur mycket vill du sätta in? (100, 300 eller 500 kr)? ";
+		cin >> playerAccountToTest;
+
+		if (playerAccountToTest == 100 || playerAccountToTest == 300 || playerAccountToTest == 500) {
+
+			break;
+		}
+		cout << "Du måste sätta in 100, 300 eller 500 kr!" << endl;
+	}
+	return playerAccountToTest;
+}
+
+// funktion som kontrollerar att spelaren satsar ett tillåtet belopp (hela kronor och tillräckligt med pengar på kontot)
+// och returnerar beloppet
+int getPlayerBet(int playerAccount) {
+	int playerBetToTest; //variabel som sparar spelarens inmatade insatsvärde
+
+	while (true) {
+		cout << "Hur mycket vill du satsa? (hela kr)?  Du har " << playerAccount << " kr kvar.";
+		cin >> playerBetToTest;
+
+		if (playerBetToTest <= playerAccount) {
+
+			break;
+			
+		}
+		cout << "Du kan inte satsa så mycket!" << endl;
+	}
+	return playerBetToTest;
+}
+
+
+int main() {
+	char playField[3][3]{}; // fält som håller den enarmade banditens spelfält
+
+	// dictionary för att slå upp oddset för ett visst antal rader
+	map<int, int> odds = {  {1, 2},
+							{2, 3},
+							{3, 4},
+							{4, 5},
+							{5, 7}
+						 };
+
+	// frö för slumptalsgenerering
+	srand(time(0));
+
+	// svenska tecken för utskrift 
+	setlocale(LC_ALL, "sv_SE");
+
+	// skapa spelarens saldo
+	//int playerAccount = 0;
+
+	// fråga efter insättning och spara i spelarens konto
+	// (flera insatser per spelomgång tillåts? Kanske inte...)
+	int playerAccount = depositPlayerAccount();
+
+	// här börjar spelloopen
+	while (true) {
+		// fråga efter insats
+		int bet = getPlayerBet(playerAccount);
+		playerAccount -= bet;
+
+		// skapa spelfältet
+		generatePlayField(playField);
+
+		// skriv ut spelfältet
+		printPlayField(playField);
+
+		// räkna antal vinnande kombinationer
+		int wins = countWinningCombinations(playField);
+
+		// presentera resultatet och betala ut eventuell vinst
+		if (wins == 0) {
+			cout << "Tyvärr ingen vinst" << endl;
+		}
+		else if (wins > 5) {
+			cout << "Hela fältet!" << endl;
+			cout << "Du vann " << bet * 10 << " kr!" << endl;
+			playerAccount += bet * 10;
+		}
+		else {
+			cout << "Grattis! Antal vinnande rader: " << wins << ". Du vann " << bet * odds[wins] << " kr!" << endl;
+			playerAccount += bet * odds[wins];
+		}
+		// om pengarna är slut avbryts spelomgången
+		if (playerAccount == 0)
+		{
+			cout << "Pengarna slut!";
+			return 0;
+		}
+	}
 	return 0;
 }
