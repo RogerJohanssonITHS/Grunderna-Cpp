@@ -50,7 +50,7 @@ bool validateBet(int bet) {
 
 
 
-
+// funktion som skriver ut spelfältet i konsollen
 void printPlayField(char playField[3][3]) {
 	// loopa över raderna
 	for (int i = 0; i < 3; i++)
@@ -76,13 +76,16 @@ int main() {
 
 	// skapa spelarens saldo
 
-	// fråga efter insats
+	// fråga efter insats (flera insatser per spelomgång tillåts? Kanske inte...)
 
 	// skapa spelfältet
 	generatePlayField(playField);
 
 	// skriv ut spelfältet
 	printPlayField(playField);
+
+	// räkna antal vinnande kombinationer
+	// wins = countWinningCombinations (playField)
 
 	int wins = 0; // variabel som håller antal vinnande kombinationer
 	// räkna vinnande rader
