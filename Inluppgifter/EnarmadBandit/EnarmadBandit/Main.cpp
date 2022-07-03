@@ -6,7 +6,6 @@
 using namespace std;
 
 
-
 // funktion som genererar ett slumptal där 1 <= slumptalet <= 3
 int generateRandomNumber() {
 	int currentNumber = rand() % 3 + 1;
@@ -124,7 +123,7 @@ int getPlayerBet(int playerAccount) {
 	int playerBetToTest; //variabel som sparar spelarens inmatade insatsvärde
 
 	while (true) {
-		cout << "Hur mycket vill du satsa? (hela kr)?  Du har " << playerAccount << " kr kvar.";
+		cout << "Hur mycket vill du satsa? (hela kr)?  Du har " << playerAccount << " kr kvar. ";
 		cin >> playerBetToTest;
 
 		if (playerBetToTest <= playerAccount) {
@@ -137,17 +136,40 @@ int getPlayerBet(int playerAccount) {
 	return playerBetToTest;
 }
 
-
-int main() {
-	char playField[3][3]{}; // fält som håller den enarmade banditens spelfält
-
-	// dictionary för att slå upp oddset för ett visst antal rader
+// funktion som presenterar resultatet av spelomgången och betalar ut eventuell vinst.
+// reutrnerar ett uppdaterad värde på spelarens konto
+int presentResult(int bet, int wins, int playerAccount) {
+	// dictionary för att slå upp oddset för ett visst antal rader {antal vinnande rader, odds}
 	map<int, int> odds = {  {1, 2},
 							{2, 3},
 							{3, 4},
 							{4, 5},
 							{5, 7}
-						 };
+	};
+
+	if (wins == 0) {
+		cout << "Tyvärr ingen vinst" << endl;
+		cout << "Du har nu " << playerAccount << " kr på ditt konto." << endl;
+	}
+	else if (wins > 5) {
+		cout << "Hela fältet!" << endl;
+		cout << "Du vann " << bet * 10 << " kr!" << endl;
+		playerAccount += bet * 10;
+		cout << "Du har nu " << playerAccount << " kr på ditt konto." << endl;
+	}
+	else {
+		cout << "Grattis! Antal vinnande rader: " << wins << ". Du vann " << bet * odds[wins] << " kr!" << endl;
+		playerAccount += bet * odds[wins];
+		cout << "Du har nu " << playerAccount << " kr på ditt konto." << endl;
+	}
+	return playerAccount;
+}
+
+
+int main() {
+	char playField[3][3]{}; // fält som håller den enarmade banditens spelfält
+
+
 
 	// frö för slumptalsgenerering
 	srand(time(0));
@@ -155,15 +177,15 @@ int main() {
 	// svenska tecken för utskrift 
 	setlocale(LC_ALL, "sv_SE");
 
-	// skapa spelarens saldo
-	//int playerAccount = 0;
-
 	// fråga efter insättning och spara i spelarens konto
-	// (flera insatser per spelomgång tillåts? Kanske inte...)
+	// (flera insatser per spelomgång tillåts inte)
 	int playerAccount = depositPlayerAccount();
 
 	// här börjar spelloopen
 	while (true) {
+		// variabel för att spara spelarens val om att fortsätta eller avbryta
+		int playerChoice;
+
 		// fråga efter insats
 		int bet = getPlayerBet(playerAccount);
 		playerAccount -= bet;
@@ -178,22 +200,18 @@ int main() {
 		int wins = countWinningCombinations(playField);
 
 		// presentera resultatet och betala ut eventuell vinst
-		if (wins == 0) {
-			cout << "Tyvärr ingen vinst" << endl;
-		}
-		else if (wins > 5) {
-			cout << "Hela fältet!" << endl;
-			cout << "Du vann " << bet * 10 << " kr!" << endl;
-			playerAccount += bet * 10;
-		}
-		else {
-			cout << "Grattis! Antal vinnande rader: " << wins << ". Du vann " << bet * odds[wins] << " kr!" << endl;
-			playerAccount += bet * odds[wins];
-		}
+		playerAccount = presentResult(bet, wins, playerAccount);
+
 		// om pengarna är slut avbryts spelomgången
 		if (playerAccount == 0)
 		{
 			cout << "Pengarna slut!";
+			return 0;
+		}
+		// fråga om spelaren vill fortsätta spela
+		cout << "Vill du fortsätta eller avbryta spelet? (0 för att avbryta; alla andra tal fortsätter)" << endl;
+		cin >> playerChoice;
+		if (!playerChoice) {
 			return 0;
 		}
 	}
