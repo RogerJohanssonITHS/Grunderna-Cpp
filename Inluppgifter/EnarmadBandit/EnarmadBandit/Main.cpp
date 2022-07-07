@@ -1,7 +1,7 @@
-#include <iostream>;
-#include <ctime>; // för random 
-#include <locale.h>; // för svenska tecken i terminalen 
-#include <map>; // för dictionary
+#include <iostream>
+#include <ctime> // för random 
+#include <locale.h> // för svenska tecken i terminalen 
+#include <map> // för dictionary
 
 using namespace std;
 
@@ -35,6 +35,13 @@ int getPlayerBet(int playerAccount);
 // returnerar ett uppdaterad värde på spelarens konto
 int presentResult(int bet, int wins, int playerAccount);
 
+// deklaration för funktion som frågar spelaren om den vill fortsätta spela
+bool continuePlay();
+
+// deklaration för funktion som frågar spelaren om den vill sätta in mer pengar
+bool continueDeposit();
+
+
 int main() {
 	// fält som håller den enarmade banditens spelfält
 	char playField[3][3]{}; 
@@ -52,10 +59,10 @@ int main() {
 	// (flera insatser per spelomgång tillåts inte)
 	int playerAccount = depositPlayerAccount();
 
-	// här börjar spelloopen
+	// här börjar spelomgången
 	while (true) {
 		// variabel för att spara spelarens val om att fortsätta eller avbryta
-		int playerChoice;
+		bool playerChoice;
 
 		// fråga efter insats
 		int bet = getPlayerBet(playerAccount);
@@ -74,8 +81,7 @@ int main() {
 		playerAccount = presentResult(bet, wins, playerAccount);
 
 		// fråga om spelaren vill fortsätta spela
-		cout << "Vill du fortsätta eller avbryta spelet? (0 för att avbryta; alla andra tal fortsätter)" << endl;
-		cin >> playerChoice;
+		playerChoice = continuePlay();
 		if (!playerChoice) {
 			cout << "Tack för att du spelade!" << endl;
 			return 0;
@@ -84,9 +90,7 @@ int main() {
 		// om pengarna är slut kan spelaren välja att sätta in mer pengar eller avsluta spelomgången
 		if (playerAccount == 0)
 		{
-			cout << "Pengarna slut!" << endl;
-			cout << "Vill du sätta in mer pengar eller avbryta spelet? (0 för att avbryta; alla andra tal fortsätter)" << endl;
-			cin >> playerChoice;
+			playerChoice = continueDeposit();
 			if (!playerChoice) {
 				cout << "Tack för att du spelade!" << endl;
 				return 0;
@@ -95,7 +99,6 @@ int main() {
 			playerAccount = depositPlayerAccount();
 		}
 	}
-	return 0;
 }
 	// funktion som genererar ett slumptal där 1 <= slumptalet <= 3
 	int generateRandomNumber() {
@@ -252,4 +255,29 @@ int main() {
 			cout << "Du har nu " << playerAccount << " kr på ditt konto." << endl;
 		}
 		return playerAccount;
+	}
+
+	// funktion som frågar spelaren om den vill fortsätta spela
+	bool continuePlay() {
+		int continueChoice;
+		cout << "Vill du fortsätta eller avbryta spelet? (0 för att avbryta; alla andra tal fortsätter)" << endl;
+		cin >> continueChoice;
+		if (continueChoice)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	// funktion som frågar spelaren om den vill sätta in mer pengar
+	bool continueDeposit() {
+		int depositChoice;
+		cout << "Pengarna slut!" << endl;
+		cout << "Vill du sätta in mer pengar eller avbryta spelet? (0 för att avbryta; alla andra tal fortsätter)" << endl;
+		cin >> depositChoice;
+		if (depositChoice)
+		{
+			return true;
+		}
+		return false;
 	}
