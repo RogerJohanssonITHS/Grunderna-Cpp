@@ -119,7 +119,7 @@ int main() {
 		else return 'O';
 	}
 
-	// funktion som bygger upp ett 3 x 3 - fält med slumpmässigt generade symboler A, X, O
+	// funktion som bygger upp ett 3 x 3 - fält med slumpmässigt genererade symboler A, X, O
 	void generatePlayField(char playField[3][3]) {
 		// loopa över raderna
 		for (int i = 0; i < 3; i++)
